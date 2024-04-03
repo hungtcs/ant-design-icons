@@ -8,8 +8,24 @@
   ],
   "homepage": "https://github.com/ant-design/ant-design-icons/",
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "require": "./lib/index.js",
+      "types": "./es/index.d.ts"
+    },
+    "./*": {
+      "import": "./es/*.js",
+      "require": "./lib/*.js",
+      "types": "./es/*.d.ts"
+    },
+    "./asn/*": {
+      "import": "./es/asn/*.js",
+      "require": "./lib/asn/*.js",
+      "types": "./es/asn/*.d.ts"
+    }
+  },
   "files": [
     "lib",
     "es",

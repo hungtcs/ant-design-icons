@@ -2,8 +2,10 @@ import { defineConfig } from 'father';
 
 const config = defineConfig({
   // Locked version only supports 1.0.0
-  plugins: ['@rc-component/father-plugin'],
+  // plugins: ["@rc-component/father-plugin"],
   cjs: {
+    output: 'lib',
+    platform: 'browser',
     transformer: 'swc',
     targets: {
       ie: 11,

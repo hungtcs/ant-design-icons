@@ -1,11 +1,16 @@
 import { generate as generateColor } from '@ant-design/colors';
-import type { AbstractNode, IconDefinition } from '@ant-design/icons-svg/lib/types';
-import { updateCSS } from 'rc-util/lib/Dom/dynamicCSS';
-import { getShadowRoot } from 'rc-util/lib/Dom/shadow';
-import warn from 'rc-util/lib/warning';
+import type { AbstractNode, IconDefinition } from '@ant-design/icons-svg/types';
+import { updateCSS } from 'rc-util/Dom/dynamicCSS';
+import { getShadowRoot } from 'rc-util/Dom/shadow';
+import warn from 'rc-util/warning';
+import type {
+  CSSProperties,
+  MouseEventHandler,
+  MutableRefObject,
+  ReactNode,
+} from 'react';
 import React, { useContext, useEffect } from 'react';
-import type { CSSProperties, MouseEventHandler, MutableRefObject, ReactNode } from 'react'
-import IconContext from './components/Context';
+import IconContext from './components/Context.js';
 
 function camelCase(input: string) {
   return input.replace(/-(.)/g, (match, g) => g.toUpperCase());
@@ -44,20 +49,28 @@ export type Attrs = Record<string, string>;
 interface RootProps {
   onClick: MouseEventHandler<Element>;
   style: CSSProperties;
-  ref: MutableRefObject<any>
-  [props: string]: string | number | ReactNode | MouseEventHandler<Element> | CSSProperties | MutableRefObject<any>
+  ref: MutableRefObject<any>;
+  [props: string]:
+    | string
+    | number
+    | ReactNode
+    | MouseEventHandler<Element>
+    | CSSProperties
+    | MutableRefObject<any>;
 }
 
 export function generate(
   node: AbstractNode,
   key: string,
-  rootProps?: RootProps | false,
+  rootProps?: RootProps | false
 ): any {
   if (!rootProps) {
     return React.createElement(
       node.tag,
       { key, ...normalizeAttrs(node.attrs) },
-      (node.children || []).map((child, index) => generate(child, `${key}-${node.tag}-${index}`)),
+      (node.children || []).map((child, index) =>
+        generate(child, `${key}-${node.tag}-${index}`)
+      )
     );
   }
 
@@ -68,7 +81,9 @@ export function generate(
       ...normalizeAttrs(node.attrs),
       ...rootProps,
     },
-    (node.children || []).map((child, index) => generate(child, `${key}-${node.tag}-${index}`)),
+    (node.children || []).map((child, index) =>
+      generate(child, `${key}-${node.tag}-${index}`)
+    )
   );
 }
 
@@ -78,7 +93,7 @@ export function getSecondaryColor(primaryColor: string): string {
 }
 
 export function normalizeTwoToneColors(
-  twoToneColor: string | [string, string] | undefined,
+  twoToneColor: string | [string, string] | undefined
 ): string[] {
   if (!twoToneColor) {
     return [];

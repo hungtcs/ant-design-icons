@@ -1,10 +1,10 @@
 // Seems this is used for iconFont
-import * as React from 'react';
 import classNames from 'classnames';
-import { useComposeRef } from 'rc-util/lib/ref'
-import Context from './Context';
+import * as React from 'react';
+import Context from './Context.js';
 
-import { svgBaseProps, warning, useInsertStyles } from '../utils';
+import { useComposeRef } from 'rc-util';
+import { svgBaseProps, useInsertStyles, warning } from '../utils.js';
 
 export interface IconBaseProps extends React.HTMLProps<HTMLSpanElement> {
   spin?: boolean;
@@ -21,12 +21,19 @@ export interface CustomIconComponentProps {
 }
 export interface IconComponentProps extends IconBaseProps {
   viewBox?: string;
-  component?: React.ComponentType<CustomIconComponentProps | React.SVGProps<SVGSVGElement>> | React.ForwardRefExoticComponent<CustomIconComponentProps>;
+  // component?:
+  //   | React.ComponentType<
+  //       CustomIconComponentProps | React.SVGProps<SVGSVGElement>
+  //     >
+  //   | React.ForwardRefExoticComponent<CustomIconComponentProps>;
+  component?: React.ComponentType<
+    CustomIconComponentProps | React.SVGProps<SVGSVGElement>
+  >;
   ariaLabel?: React.AriaAttributes['aria-label'];
 }
 
 const Icon: React.ForwardRefExoticComponent<
-Omit<IconComponentProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+  Omit<IconComponentProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
 > = React.forwardRef<HTMLSpanElement, IconComponentProps>((props, ref) => {
   const {
     // affect outter <i>...</i>
@@ -51,18 +58,14 @@ Omit<IconComponentProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
 
   warning(
     Boolean(Component || children),
-    'Should have `component` prop or `children`.',
+    'Should have `component` prop or `children`.'
   );
 
   useInsertStyles(iconRef);
 
   const { prefixCls = 'anticon', rootClassName } = React.useContext(Context);
 
-  const classString = classNames(
-    rootClassName,
-    prefixCls,
-    className,
-  );
+  const classString = classNames(rootClassName, prefixCls, className);
 
   const svgClassString = classNames({
     [`${prefixCls}-spin`]: !!spin,
@@ -99,7 +102,7 @@ Omit<IconComponentProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
             React.isValidElement(children) &&
             React.Children.only(children).type === 'use'),
         'Make sure that you provide correct `viewBox`' +
-        ' prop (default `0 0 1024 1024`) to the icon.',
+          ' prop (default `0 0 1024 1024`) to the icon.'
       );
 
       return (
